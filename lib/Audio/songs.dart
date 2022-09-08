@@ -1,0 +1,147 @@
+import 'package:bitslogicxplayer/Audio/play.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'dart:developer';
+import 'dart:io';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:just_audio_background/just_audio_background.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:on_audio_query/on_audio_query.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:just_audio/just_audio.dart';
+
+class SongList extends StatefulWidget {
+  SongList({Key? key}) : super(key: key);
+
+  @override
+  State<SongList> createState() => _SongListState();
+}
+
+class _SongListState extends State<SongList> {
+  final audioQuery = new OnAudioQuery();
+  final AudioPlayer audioPlayer = AudioPlayer();
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    requestPermission();
+  }
+
+  requestPermission() {
+    Permission.storage.request();
+  }
+
+  playSong(String? uri) {
+    try {
+      audioPlayer.setAudioSource(AudioSource.uri(Uri.parse(uri.toString())));
+      audioPlayer.play();
+    } on Exception {
+      log("error parsing song");
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      
+        appBar: AppBar(
+          title: Text("BitsAudio Player"),
+          backgroundColor: Colors.lightBlue[200],
+        ),
+        body: FutureBuilder<List<SongModel>>(
+            future: audioQuery.querySongs(
+              sortType: null,
+              orderType: OrderType.ASC_OR_SMALLER,
+              uriType: UriType.EXTERNAL,
+              ignoreCase: true,
+            ),
+            builder: (context, item) {
+              if (item.data == null) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              return Container(
+                
+                  child: ListView.builder(
+                      itemBuilder: (context, index) => Container(
+                            padding: EdgeInsets.only(top: 5, bottom: 30),
+                            margin: EdgeInsets.only(top: 5, left: 5, right: 5),
+                            child: GridView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                              ),
+                              itemBuilder: (context, index) {
+                                return Container(
+                                   decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: <Color>[
+                                      Color(0xff81D4F4),
+                                      Color(0xff81D4F4),
+                                    ], // Gr)),
+                                  ),
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                        blurRadius: 4.0,
+                                        offset: Offset(-4, -4),
+                                        color: Colors.white24),
+                                    BoxShadow(
+                                        blurRadius: 4.0,
+                                        offset: Offset(4, 4),
+                                        color: Colors.black),
+                                  ]),
+                                  child: Stack(
+                                    children: [
+                                      QueryArtworkWidget(
+                                            id: item.data![index].id,
+                                            type: ArtworkType.AUDIO,
+                                            artworkFit: BoxFit.cover,
+                                            artworkScale: 10,
+                                            artworkHeight: double.infinity-200,
+                                            artworkWidth: double.infinity-200,
+                                            size: 500,
+                                            
+                                            nullArtworkWidget: Image.asset("assets/mr1.png"),
+                                            ),
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          
+                                          ListTile(
+                                            title: Text(item.data![index].displayName,style: TextStyle(fontSize: 15),),
+                                            
+                                            onTap: (() {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) => Play(
+                                                          song: item.data![index],
+                                                          audioPlayer: audioPlayer,
+                                                        )),
+                                              );
+                                            }),
+                                          
+                                                
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                              itemCount: item.data!.length,
+                            ),
+                          )));
+            }));
+  }
+}
