@@ -22,7 +22,7 @@ class _OfolderState extends State<Ofolder> {
     for (StorageInfo storage in storageInfo) {
       print(storage.rootDir);
     }
-    var root = storageInfo[0].rootDir; //storageInfo[1] for SD card, geting the root directory
+   
     var fm = FileManager(root: Directory(widget.vp)); //
     files = await fm.filesTree(
       //set fm.dirsTree() for directory/folder tree list

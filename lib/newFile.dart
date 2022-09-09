@@ -123,14 +123,14 @@ class _MyFileList extends State<MyFileList> {
       listImages.add(File(thumb));
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           iconTheme: IconThemeData(
-            color: Colors.white, //change your color here
+            color: Colors.white,
           ),
           leading: IconButton(
               icon: Icon(Icons.arrow_back, color: Colors.white),
@@ -139,15 +139,12 @@ class _MyFileList extends State<MyFileList> {
                     .push(MaterialPageRoute(builder: (context) => Info()));
               }),
           backgroundColor: Colors.lightBlue[300],
-          title: Text(
-            'Device videos',
-          ),
+          title: Text('Device videos',),
         ),
         body: files == null
             ? Center(child: CircularProgressIndicator())
             : ListView.builder(
                 itemBuilder: (context, index) => Container(
-
                     child: GridView.builder(
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
@@ -155,19 +152,18 @@ class _MyFileList extends State<MyFileList> {
                           crossAxisCount: 2,
                           crossAxisSpacing: 10,
                           mainAxisSpacing: 10,
-                          
                         ),
                         itemCount: files.length,
                         itemBuilder: (context, index) {
                           return Container(
-                            
                               decoration: BoxDecoration(
                                   gradient: LinearGradient(
                                     begin: Alignment.topLeft,
                                     end: Alignment.bottomRight,
                                     colors: <Color>[
-                                      Color(0xff81D4F4),
-                                      Color(0xff81D4F4),
+                                     
+                                      Color(0xFFFDD0),
+                                      Color(0xFFFFED),
                                     ], // Gr)),
                                   ),
                                   borderRadius: BorderRadius.circular(20),
@@ -175,44 +171,35 @@ class _MyFileList extends State<MyFileList> {
                                     BoxShadow(
                                         blurRadius: 4.0,
                                         offset: Offset(-4, -4),
-                                        color: Colors.white24),
+                                        color: Colors.white),
                                     BoxShadow(
                                         blurRadius: 4.0,
                                         offset: Offset(4, 4),
-                                        color: Colors.black),
+                                        color: Colors.black12),
                                   ]),
-                            child: Stack(
-
-                              children: [
-                                
-                                  Icon(Icons.video_file,size: 100,),
-                                 Column(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                      
-                                        ListTile(
-                                                title: Text(
-                                                    files[index].path.split('/').last),
-                                                
-                                                
-                                                onTap: () {
-                                                  Navigator.of(context).push(
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              Sampleplayer(
-                                                                  vp: files[index]
-                                                                      .path)));
-                                                },
-                                              ),
-                                      ],
+                              child: Stack(children: [
+                                Icon(
+                                  Icons.video_file,
+                                  size: 100,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    ListTile(
+                                      title:
+                                          Text(files[index].path.split('/').last),
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Sampleplayer(
+                                                        vp: files[index].path)));
+                                      },
                                     ),
-                            
-                            
-                              
-                              ]
-                            ),
-                          );
+                                  ],
+                                ),
+                              ]),
+                            );
                         }))));
   }
 }
-

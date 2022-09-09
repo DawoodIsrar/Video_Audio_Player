@@ -1,4 +1,6 @@
 import 'package:bitslogicxplayer/Audio/play.dart';
+import 'package:bitslogicxplayer/Video/folders.dart';
+import 'package:bitslogicxplayer/newFile.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'dart:developer';
@@ -44,11 +46,12 @@ class _SongListState extends State<SongList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
+     
         appBar: AppBar(
           title: Text("BitsAudio Player"),
           backgroundColor: Colors.lightBlue[200],
         ),
+      
         body: FutureBuilder<List<SongModel>>(
             future: audioQuery.querySongs(
               sortType: null,
@@ -67,26 +70,15 @@ class _SongListState extends State<SongList> {
                 
                   child: ListView.builder(
                       itemBuilder: (context, index) => Container(
-                            padding: EdgeInsets.only(top: 5, bottom: 30),
-                            margin: EdgeInsets.only(top: 5, left: 5, right: 5),
-                            child: GridView.builder(
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 10,
-                                mainAxisSpacing: 10,
-                              ),
-                              itemBuilder: (context, index) {
-                                return Container(
                                    decoration: BoxDecoration(
                                   gradient: LinearGradient(
                                     begin: Alignment.topLeft,
                                     end: Alignment.bottomRight,
                                     colors: <Color>[
-                                      Color(0xff81D4F4),
-                                      Color(0xff81D4F4),
+                                           Color(0xC4A484),
+                                      Color(0xFFFDD0),
+                                      Color(0xFFFFED),
+                                     
                                     ], // Gr)),
                                   ),
                                   borderRadius: BorderRadius.circular(20),
@@ -94,30 +86,23 @@ class _SongListState extends State<SongList> {
                                     BoxShadow(
                                         blurRadius: 4.0,
                                         offset: Offset(-4, -4),
-                                        color: Colors.white24),
+                                        color: Colors.white),
                                     BoxShadow(
                                         blurRadius: 4.0,
                                         offset: Offset(4, 4),
-                                        color: Colors.black),
+                                        color: Colors.black12),
                                   ]),
-                                  child: Stack(
-                                    children: [
-                                      QueryArtworkWidget(
+                                  child:  ListTile(
+                                            leading:   QueryArtworkWidget(
                                             id: item.data![index].id,
                                             type: ArtworkType.AUDIO,
                                             artworkFit: BoxFit.cover,
                                             artworkScale: 10,
-                                            artworkHeight: double.infinity-200,
-                                            artworkWidth: double.infinity-200,
-                                            size: 500,
+                                       
+                                            
                                             
                                             nullArtworkWidget: Image.asset("assets/mr1.png"),
                                             ),
-                                      Column(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          
-                                          ListTile(
                                             title: Text(item.data![index].displayName,style: TextStyle(fontSize: 15),),
                                             
                                             onTap: (() {
@@ -133,15 +118,16 @@ class _SongListState extends State<SongList> {
                                           
                                                 
                                           ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                );
+                                    
+                                    
+                                  
+                                ),
+                                itemCount: item.data!.length,
+                  ));
+                  
                               },
-                              itemCount: item.data!.length,
-                            ),
-                          )));
-            }));
+                              
+                          ));
+            }
   }
-}
+

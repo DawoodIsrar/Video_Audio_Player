@@ -5,6 +5,7 @@ import 'package:bitslogicxplayer/Video/folders.dart';
 import 'package:bitslogicxplayer/Video/new.dart';
 import 'package:bitslogicxplayer/Video/videoHome.dart';
 import 'package:bitslogicxplayer/newFile.dart';
+import 'package:bitslogicxplayer/playonline.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -36,6 +37,10 @@ class _InfoState extends State<Info> {
       'Index 2: Folders',
       style: optionStyle,
     ),
+    Text(
+      'Index 3: Network',
+      style: optionStyle,
+    ),
   ];
 
   void _onItemTapped(int index) {
@@ -55,6 +60,10 @@ class _InfoState extends State<Info> {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => Folders()));
       }
+        else if(index==3){
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => POnline()));
+      }
     });
   }
   @override
@@ -67,6 +76,7 @@ class _InfoState extends State<Info> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.video_file_sharp),
@@ -81,6 +91,7 @@ class _InfoState extends State<Info> {
             icon: Icon(Icons.folder_open_sharp),
             label: 'Folders',
           ),
+          
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.lightBlue[300],
@@ -126,6 +137,20 @@ class _InfoState extends State<Info> {
               onTap: () {
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) => FF()));
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.play_arrow,
+                size: 20,
+              ),
+              title: Text(
+                'Device Folders',
+                style: TextStyle(color: Colors.lightBlue[300]),
+              ),
+              onTap: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => Folders()));
               },
             ),
           ],

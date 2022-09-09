@@ -69,8 +69,8 @@ class _SampleplayerState extends State<Sampleplayer> {
           end: Alignment.bottomRight,
           colors: <Color>[
 
-            Color(0xFFFFFF),
-            Color(0xff81D4F4),
+           Color(0xFFFDD0),
+                                      Color(0xFFFFED),
           ], // Gr)),
         )),
         child: Column(
