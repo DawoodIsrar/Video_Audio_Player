@@ -18,7 +18,7 @@ import 'package:thumbnails/thumbnails.dart';
 
 import 'Video/better.dart';
 
-class FF extends StatelessWidget {
+class FFF extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -141,67 +141,24 @@ class _MyFileList extends State<MyFileList> {
           backgroundColor: Colors.lightBlue[300],
           title: Text('Device videos',),
         ),
-        body: 
-        
-        files == null
-            ? Center(child: CircularProgressIndicator())
-            : ListView.builder(
-                itemBuilder: (context, index) => Container(
-                    child: GridView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                        ),
-                        itemCount: files.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                              decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                    colors: <Color>[
-                                     
-                                      Color(0xFFFDD0),
-                                      Color(0xFFFFED),
-                                    ], // Gr)),
-                                  ),
-                                  borderRadius: BorderRadius.circular(20),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                        blurRadius: 4.0,
-                                        offset: Offset(-4, -4),
-                                        color: Colors.white),
-                                    BoxShadow(
-                                        blurRadius: 4.0,
-                                        offset: Offset(4, 4),
-                                        color: Colors.black12),
-                                  ]),
-                              child:Stack(children: [
-                                Icon(
-                                  Icons.video_file,
-                                  size: 100,
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    ListTile(
-                                      title:
-                                          Text(files[index].path.split('/').last),
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    Sampleplayer(
-                                                        vp: files[index].path)));
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ]),
-                            );
-                        }))));
+        body: FutureBuilder(
+    future: getVideo(files),
+    builder:(context, AsyncSnapshot snapshot) {
+        if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+         } else {
+            return Container(
+                child: ListView.builder(                                                  
+                    itemCount: listImages.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (BuildContext context, int index) {
+                        return Image.file(File(listImages[index].toString()));                                          
+                    }
+                )
+            );
+         }
+     }
+)
+     );
   }
 }

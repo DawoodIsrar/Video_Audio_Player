@@ -4,6 +4,7 @@ import 'package:bitslogicxplayer/Audio/songs.dart';
 import 'package:bitslogicxplayer/Video/folders.dart';
 import 'package:bitslogicxplayer/Video/new.dart';
 import 'package:bitslogicxplayer/Video/videoHome.dart';
+import 'package:bitslogicxplayer/futurelist.dart';
 import 'package:bitslogicxplayer/newFile.dart';
 import 'package:bitslogicxplayer/playonline.dart';
 import 'package:flutter/cupertino.dart';
