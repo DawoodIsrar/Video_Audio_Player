@@ -117,7 +117,7 @@ class _MyFileList extends State<MyFileList>{
                   builder: (context) => Info()));
             }
         ),
-        backgroundColor: Colors.lightBlue[300],
+        backgroundColor: Colors.lightBlue[200],
         title: Text(
           'Device Folders',
         ),
@@ -132,14 +132,38 @@ class _MyFileList extends State<MyFileList>{
           child:files == null? Text("Searching Files"):
 
           Card(
-              child:ListTile(
-                title: Text(files[index].path.split('/').last),
-                leading: Icon(Icons.folder),
-                trailing: Icon(Icons.delete, color: Colors.redAccent,),
-                onTap:  (){
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) => Ofolder(vp: files[index].path)));
-                },
+              child:Container(
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: <Color>[
+                        Color(0xC4A484),
+                        Color(0xFFFDD0),
+                        Color(0xFFFFED),
+
+                      ], // Gr)),
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: const [
+                      BoxShadow(
+                          blurRadius: 4.0,
+                          offset: Offset(-4, -4),
+                          color: Colors.white),
+                      BoxShadow(
+                          blurRadius: 4.0,
+                          offset: Offset(4, 4),
+                          color: Colors.black12),
+                    ]),
+                child: ListTile(
+                  title: Text(files[index].path.split('/').last),
+                  leading: Icon(Icons.folder),
+
+                  onTap:  (){
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) => Ofolder(vp: files[index].path)));
+                  },
+                ),
               )
           ),
 

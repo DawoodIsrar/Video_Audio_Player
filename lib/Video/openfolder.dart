@@ -100,7 +100,7 @@ class _OfolderState extends State<Ofolder> {
                   builder: (context) => Folders()));
             }
         ),
-        backgroundColor: Colors.lightBlue[300],
+        backgroundColor: Colors.lightBlue[200],
         title: Text(
           'Videos',
         ),

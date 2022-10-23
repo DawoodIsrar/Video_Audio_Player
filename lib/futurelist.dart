@@ -139,26 +139,14 @@ class _MyFileList extends State<MyFileList> {
                     .push(MaterialPageRoute(builder: (context) => Info()));
               }),
           backgroundColor: Colors.lightBlue[300],
-          title: Text('Device videos',),
+          title: Text(
+            'Device videos',
+          ),
         ),
-        body: FutureBuilder(
-    future: getVideo(files),
-    builder:(context, AsyncSnapshot snapshot) {
-        if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
-         } else {
-            return Container(
-                child: ListView.builder(                                                  
-                    itemCount: listImages.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (BuildContext context, int index) {
-                        return Image.file(File(listImages[index].toString()));                                          
-                    }
-                )
-            );
-         }
-     }
-)
-     );
+        body: Container(
+          child: Center(
+            child: ElevatedButton(onPressed: (){}, child: Text("press to see list of videos")),
+          ),
+        ));
   }
 }

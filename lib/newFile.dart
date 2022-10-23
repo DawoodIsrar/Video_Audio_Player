@@ -13,12 +13,12 @@ import 'package:path_provider_ex/path_provider_ex.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:saf/saf.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
-//import package files
 import 'package:thumbnails/thumbnails.dart';
-
 import 'Video/better.dart';
 
 class FF extends StatelessWidget {
+  FF(List<File> listImages);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -71,20 +71,21 @@ class _MyFileList extends State<MyFileList> {
         "MPG",
         "MP2",
         "QT"
-      ], //optional, to filter files, remove to list all,
-      //remove this if your are grabbing folder list
-      excludeHidden: false,
+      ],
+      excludeHidden: true,
     );
 
-    setState(() {}); //update the UI
+    setState(() {
+      print(
+          "NO of files recieve from thumnail:" + listImages.length.toString());
+    });
   }
 
   @override
   void initState() {
     Future<bool> requestFilePermission() async {
       PermissionStatus result;
-      // In Android we need to request the storage permission,
-      // while in iOS is the photos permission
+
       if (Platform.isAndroid) {
         result = await Permission.storage.request();
       } else {
@@ -92,9 +93,9 @@ class _MyFileList extends State<MyFileList> {
       }
 
       if (result.isGranted) {
-        getFiles(); //call getFiles() function on initial state.
-
+        getFiles();
       }
+
       _video = File(files);
       return false;
     }
@@ -107,22 +108,6 @@ class _MyFileList extends State<MyFileList> {
   late File _video;
   String thumbnail = '';
   List<File> listImages = <File>[];
-  getVideo(File f) async {
-    File file = await f;
-    if (file != null) {
-      setState(() {
-        _video = File(file.path);
-      });
-      String thumb = await Thumbnails.getThumbnail(
-        videoFile: _video.path,
-        quality: 10,
-        imageType: ThumbFormat.PNG,
-      );
-      try {} catch (e) {}
-      thumbnail = thumb;
-      listImages.add(File(thumb));
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -138,70 +123,72 @@ class _MyFileList extends State<MyFileList> {
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) => Info()));
               }),
-          backgroundColor: Colors.lightBlue[300],
-          title: Text('Device videos',),
+          backgroundColor: Colors.lightBlue[200],
+          title: Text(
+            'YoMate Device videos',
+          ),
         ),
-        body: 
-        
-        files == null
+        body: files == null
             ? Center(child: CircularProgressIndicator())
             : ListView.builder(
-                itemBuilder: (context, index) => Container(
-                    child: GridView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                        ),
-                        itemCount: files.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                              decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                    colors: <Color>[
-                                     
-                                      Color(0xFFFDD0),
-                                      Color(0xFFFFED),
-                                    ], // Gr)),
-                                  ),
-                                  borderRadius: BorderRadius.circular(20),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                        blurRadius: 4.0,
-                                        offset: Offset(-4, -4),
-                                        color: Colors.white),
-                                    BoxShadow(
-                                        blurRadius: 4.0,
-                                        offset: Offset(4, 4),
-                                        color: Colors.black12),
-                                  ]),
-                              child:Stack(children: [
-                                Icon(
-                                  Icons.video_file,
-                                  size: 100,
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    ListTile(
-                                      title:
-                                          Text(files[index].path.split('/').last),
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    Sampleplayer(
-                                                        vp: files[index].path)));
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ]),
-                            );
-                        }))));
+                itemCount: files.length,
+                itemBuilder: (context, index) => GridView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    physics: NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                    ),
+                    itemCount: files.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: <Color>[
+                                Color(0xFFFDD0),
+                                Color(0xFFFFED),
+                              ], // Gr)),
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: const [
+                              BoxShadow(
+                                  blurRadius: 4.0,
+                                  offset: Offset(-4, -4),
+                                  color: Colors.white),
+                              BoxShadow(
+                                  blurRadius: 4.0,
+                                  offset: Offset(4, 4),
+                                  color: Colors.black12),
+                            ]),
+                        child: Stack(children: [
+                          Align(
+                            alignment: Alignment.center,
+                            child: Image.file(
+                              File(listImages[index].toString()),
+                              alignment: Alignment.center,
+                              width: 100,
+                            ),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              ListTile(
+                                title: Text(files[index].path.split('/').last),
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          Sampleplayer(vp: files[index].path)));
+                                },
+                                onLongPress: () {},
+                              ),
+                            ],
+                          ),
+                        ]),
+                      );
+                    })));
   }
 }

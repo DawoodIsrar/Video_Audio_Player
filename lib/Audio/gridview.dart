@@ -97,4 +97,3 @@ class _TurnAnimationState extends State<TurnAnimation>
     );
   }
 }
-

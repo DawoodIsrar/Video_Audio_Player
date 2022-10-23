@@ -7,12 +7,11 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:on_audio_query/on_audio_query.dart';
-import 'package:on_audio_query/on_audio_query.dart';
 
 class Play extends StatefulWidget {
-  Play({Key? key, required this.song, required this.audioPlayer})
+  Play({Key? key, required this.audioPlayer, required this.song})
       : super(key: key);
+  final List<SongModel> songModelList = [];
   final SongModel song;
   final AudioPlayer audioPlayer;
   @override
@@ -66,25 +65,27 @@ class _PlayState extends State<Play> {
     Duration d = Duration(seconds: seconds);
     widget.audioPlayer.seek(d);
   }
-   void next(AudioPlayer audioPlayer) async {
-    await widget.audioPlayer.seekToNext();
-    
-}
-void prev(AudioPlayer audioPlayer){
-widget.audioPlayer.seekToPrevious();
-setState(() {
- widget.audioPlayer.seekToPrevious();
-});
 
+  void next(AudioPlayer audioPlayer) {
+    audioPlayer.hasNext
+        ? widget.audioPlayer.seekToNext()
+        : setState(() {
+            widget.audioPlayer.seekToNext();
+          });
+  }
 
-}
-
+  void prev(AudioPlayer audioPlayer) {
+    widget.audioPlayer.seekToPrevious();
+    setState(() {
+      widget.audioPlayer.seekToPrevious();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("BitsAudio Player"),
+        title: Text("YoMate MP3"),
         backgroundColor: Colors.lightBlue[200],
       ),
       body: SafeArea(
@@ -182,13 +183,16 @@ setState(() {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    IconButton(
-                        onPressed: () {
-                          setState(() {
-                           prev(widget.audioPlayer);
-                          });
-                        },
-                        icon: Icon(Icons.skip_previous, size: 50)),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          if (widget.audioPlayer.hasPrevious) {
+                            widget.audioPlayer.seekToPrevious();
+                          }
+                        });
+                      },
+                      child: Icon(Icons.skip_previous, size: 50),
+                    ),
                     SizedBox(
                       height: 10,
                     ),
@@ -210,11 +214,16 @@ setState(() {
                     SizedBox(
                       height: 10,
                     ),
-                    IconButton(
-                        onPressed: () {
-                         next(widget.audioPlayer);
-                        },
-                        icon: Icon(Icons.skip_next, size: 50)),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          if (widget.audioPlayer.hasNext) {
+                            widget.audioPlayer.seekToNext();
+                          }
+                        });
+                      },
+                      child: Icon(Icons.skip_next, size: 50),
+                    ),
                     SizedBox(
                       height: 10,
                     ),

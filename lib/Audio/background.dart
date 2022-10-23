@@ -1,17 +1,15 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+
 _backgroundTaskEntrypoint() {
   AudioServiceBackground.run(() => AudioPlayerTask());
 
   String vp;
 }
 
-
 class AudioPlayerTask extends BackgroundAudioTask {
   final _audioPlayer = AudioPlayer();
-  
-
 }
 
 class HomePage extends StatefulWidget {
@@ -37,11 +35,9 @@ class _HomePageState extends State<HomePage> {
             body: Center(
               child: Column(
                 children: [
-                  StreamBuilder<MediaItem>(
-            
-                      builder: (_, snapshot) {
-                        return Text(snapshot.data?.title ?? "title");
-                      }),
+                  StreamBuilder<MediaItem>(builder: (_, snapshot) {
+                    return Text(snapshot.data?.title ?? "title");
+                  }),
                   StreamBuilder<PlaybackState>(
                       stream: AudioService.playbackStateStream,
                       builder: (context, snapshot) {
@@ -83,7 +79,6 @@ class _HomePageState extends State<HomePage> {
                       return Slider(
                         value: mediaState?.inSeconds?.toDouble() ?? 0,
                         min: 0,
-                     
                         onChanged: (val) {
                           AudioService.seekTo(Duration(seconds: val.toInt()));
                         },
